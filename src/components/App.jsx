@@ -15,7 +15,7 @@ export class App extends Component {
 
   componentDidMount() {
     const savedContacts = load(PB_KEY);
-    this.setState({ contacts: savedContacts });
+    this.setState({ contacts: savedContacts || [] });
   }
 
   componentDidUpdate(_, prevState) {
