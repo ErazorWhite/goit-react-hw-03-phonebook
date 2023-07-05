@@ -11,7 +11,6 @@ import {
   StyledSubmitButton,
   StyledMaskedInput, // Франкенштейн из Masked + Styled, который под капотом ещё наверное Field от формика инкапсулирует
 } from './ContactForm.styled';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 // Инпут маска для номера телефона
 const phoneNumberMask = [
