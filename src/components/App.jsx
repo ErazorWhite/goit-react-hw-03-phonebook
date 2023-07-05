@@ -4,25 +4,34 @@ import ContactList from './ContactList/ContactList';
 import Filter from 'components/Filter/Filter';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
+import { save, load } from '../localStorage';
 
+const PB_KEY = 'phonebook_item_index';
 export class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '+38(050)459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '+79(123)443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '+41(321)645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '+38(096)227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const savedContacts = load(PB_KEY);
+    this.setState({ contacts: savedContacts });
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { contacts } = this.state;
+    if (prevState.contacts.length !== contacts.length) {
+      save(PB_KEY, contacts);
+    }
+  }
 
   createPhoneBookEntry = data => {
     const normalizedData = data.name.toLowerCase();
     const { contacts } = this.state;
     if (contacts.some(({ name }) => name.toLowerCase() === normalizedData)) {
-      Notify.failure("Such a contact already exists!");
-      return 
-    };
+      Notify.failure('Such a contact already exists!');
+      return;
+    }
 
     const newPhoneBookEntry = {
       ...data,
